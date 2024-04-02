@@ -12,12 +12,31 @@ def load_questions(file_path):
     questions = []
     with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
-        for i in range(0, len(lines), 6):
-            prompt = lines[i].strip()
-            options = [line.strip() for line in lines[i+1:i+4]]
-            correct_option = int(lines[i+4].split(':')[1])
-            question = Question(prompt, options, correct_option-1)
-            questions.append(question)
+        current_question_number = 0
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip('\n')
+            try:
+                question_number = int(line)
+                current_question_number += 1
+                i += 1
+                prompt = lines[i].strip()
+                i += 1
+                options = []
+                while i < len(lines) and lines[i].strip() != "###":
+                    options.append(lines[i].strip())
+                    i += 1
+                correct_option = None
+                if i < len(lines) and lines[i].strip() == "###":
+                    i += 1
+                    if i < len(lines):
+                        correct_option = int(lines[i].strip()) - 1  # Правильный ответ - индекс варианта ответа
+                        i += 1
+                question = Question(prompt, options, correct_option)
+                questions.append(question)
+            except ValueError:
+                # Пропускаем строки, которые не являются числами
+                i += 1
     return questions
 
 def select_file():
@@ -34,14 +53,21 @@ def run_quiz(questions, result_list):
     user_answers = []
     for i, question in enumerate(questions, 1):
         ans = question.user_answer.get()
-        user_answer = f"Ваш ответ: {question.options[int(ans)]}"
-        is_correct = ans == str(question.correct_option)
-        score += is_correct
-        correct_option_index = question.correct_option
-        if correct_option_index < len(question.options):
-            correct_option = question.options[correct_option_index]
+        if ans:  # Проверка на пустую строку
+            user_answer = f"Ваш ответ: {question.options[int(ans)]}"
+            is_correct = ans == str(question.correct_option)
         else:
-            correct_option = "Недоступно"
+            user_answer = "Вы не выбрали ответ"
+            is_correct = False
+        score += is_correct
+        if question.correct_option is not None:
+            correct_option_index = question.correct_option
+            if correct_option_index < len(question.options):
+                correct_option = question.options[correct_option_index]
+            else:
+                correct_option = "Недоступно"
+        else:
+            correct_option = "Правильный ответ отсутствует"
         user_answers.append((user_answer, is_correct, correct_option))
         result_list.insert(tk.END, f"{user_answer}\n")
         result_list.insert(tk.END, f"   Правильно" if is_correct else "   Неправильно.")
@@ -73,7 +99,6 @@ def show_results(questions, root):
 
     result_list.pack()  # Добавленная строка
 
-
 def show_answers(user_answers, root):
     answers_window = tk.Toplevel(root)
     answers_window.title("Правильные ответы")
@@ -86,8 +111,13 @@ def show_answers(user_answers, root):
         answers_list.insert(tk.END, f"{i}. {user_answer}")
         if is_correct:
             answers_list.insert(tk.END, f"Ответ верный!")
+        elif user_answer == "Вы не выбрали ответ":
+            answers_list.insert(tk.END, "Вы не выбрали ответ")
         else:
-            answers_list.insert(tk.END, f"Правильный ответ: {correct_option}")
+            if correct_option == "Правильный ответ отсутствует":
+                answers_list.insert(tk.END, correct_option)
+            else:
+                answers_list.insert(tk.END, f"Правильный ответ: {correct_option}")
         answers_list.insert(tk.END, "")
 
     close_button = ttk.Button(answers_window, text="Закрыть", command=answers_window.destroy)
