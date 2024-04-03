@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
+import subprocess
 
 class Question:
     def __init__(self, prompt, options, correct_option):
@@ -47,6 +48,9 @@ def select_file():
     if file_path:
         questions = load_questions(file_path)
         start_quiz(questions, root)
+
+def create_test():
+    subprocess.Popen(["python", "Create test.py"])
 
 def run_quiz(questions, result_list):
     score = 0
@@ -143,5 +147,8 @@ root.title("Тест")
 
 select_file_button = ttk.Button(root, text="Выбрать файл", command=select_file)
 select_file_button.pack()
+create_test = tk.Button(root, text="Создать тест", command=create_test)
+create_test.pack()
+
 
 root.mainloop()
