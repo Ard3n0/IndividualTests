@@ -48,9 +48,16 @@ def select_file():
     if file_path:
         questions = load_questions(file_path)
         start_quiz(questions, root)
+        # Скрыть кнопки после выбора файла
+        create_test.pack_forget()
+        test_editor.pack_forget()
+
 
 def create_test():
     subprocess.Popen(["python", "Create test.py"])
+
+def test_editor():
+    subprocess.Popen(["python", "Test editor2.py"])
 
 def run_quiz(questions, result_list):
     score = 0
@@ -149,6 +156,8 @@ select_file_button = ttk.Button(root, text="Выбрать файл", command=se
 select_file_button.pack()
 create_test = tk.Button(root, text="Создать тест", command=create_test)
 create_test.pack()
+test_editor = tk.Button(root, text="Отредактировать тест", command=test_editor)
+test_editor.pack()
 
 
 root.mainloop()
