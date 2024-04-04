@@ -41,7 +41,9 @@ def create_question_file():
     def save_file():
         file_path = filedialog.asksaveasfilename(defaultextension=".txt")
         if file_path:
+            time_limit = time_entry.get()
             with open(file_path, "w", encoding="utf-8") as file:
+                file.write(str(time_limit) + "\n")
                 for question_num, prompt, options, correct_option in questions:
                     file.write(str(question_num) + "\n")
                     file.write(prompt + "\n")
@@ -87,44 +89,49 @@ def create_question_file():
     root = tk.Tk()
     root.title("Создание файла с вопросами")
 
+    time_label = ttk.Label(root, text="Длительность теста (в минутах):")
+    time_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+    time_entry = ttk.Entry(root, width=10)
+    time_entry.grid(row=0, column=1, padx=5, pady=5)
+
     prompt_label = ttk.Label(root, text="Вопрос:")
-    prompt_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+    prompt_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
     prompt_entry = ttk.Entry(root, width=40)
-    prompt_entry.grid(row=0, column=1, padx=5, pady=5)
+    prompt_entry.grid(row=1, column=1, padx=5, pady=5)
 
     options_label = ttk.Label(root, text="Варианты ответов(2-10):")
-    options_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+    options_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
     add_option_button = ttk.Button(root, text="+", command=lambda: add_option_entry())
-    add_option_button.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+    add_option_button.grid(row=2, column=1, padx=5, pady=5, sticky="w")
     remove_option_button = ttk.Button(root, text="-", command=lambda: remove_option_entry())
-    remove_option_button.grid(row=1, column=2, padx=5, pady=5, sticky="w")
+    remove_option_button.grid(row=2, column=2, padx=5, pady=5, sticky="w")
 
     option_entries = []
     option_labels = []
-    for i in range(2):  # начальное количество вариантов ответа
+    for i in range(2):
         option_label = ttk.Label(root, text=f"Вариант {i + 1}:")
-        option_label.grid(row=2+i, column=0, padx=5, pady=5, sticky="w")
+        option_label.grid(row=3+i, column=0, padx=5, pady=5, sticky="w")
         option_labels.append(option_label)
         option_entry = ttk.Entry(root, width=20)
-        option_entry.grid(row=2+i, column=1, padx=5, pady=5)
+        option_entry.grid(row=3+i, column=1, padx=5, pady=5)
         option_entries.append(option_entry)
 
     correct_option_label = ttk.Label(root, text="Номер правильного ответа:")
-    correct_option_label.grid(row=2, column=2, padx=5, pady=5, sticky="w")
+    correct_option_label.grid(row=3, column=2, padx=5, pady=5, sticky="w")
     correct_option_entry = ttk.Entry(root, width=10)
-    correct_option_entry.grid(row=2, column=3, padx=5, pady=5)
+    correct_option_entry.grid(row=3, column=3, padx=5, pady=5)
 
     add_button = ttk.Button(root, text="Добавить вопрос", command=add_question)
-    add_button.grid(row=3, column=3, padx=5, pady=5)
+    add_button.grid(row=4, column=3, padx=5, pady=5)
 
     save_button = ttk.Button(root, text="Сохранить файл", command=save_file)
-    save_button.grid(row=4, column=3, padx=5, pady=5)
+    save_button.grid(row=5, column=3, padx=5, pady=5)
 
     info_label = ttk.Label(root, text="")
-    info_label.grid(row=5, column=3, padx=5, pady=5)
+    info_label.grid(row=6, column=3, padx=5, pady=5)
 
     error_label = ttk.Label(root, text="", foreground="red")
-    error_label.grid(row=6, column=3, padx=5, pady=5)
+    error_label.grid(row=7, column=3, padx=5, pady=5)
 
     question_list_label = ttk.Label(root, text="Добавленные вопросы:")
     question_list_label.grid(row=0, column=4, padx=5, pady=5, sticky="w")
