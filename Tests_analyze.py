@@ -5,6 +5,19 @@ from ttkthemes import ThemedStyle
 
 
 class TestResultsAnalyzer(tk.Tk):
+    def open_python_file(self):
+        file_path = filedialog.askopenfilename(
+            title="Выберите файл Python",
+            filetypes=[("Python Files", "*.py")]
+        )
+        if file_path:
+            try:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                    self.show_python_file_content(content)
+            except Exception as e:
+                print("Error opening Python file:", e)
+
     def __init__(self):
         super().__init__()
         self.title("Результаты теста")
@@ -55,8 +68,7 @@ class TestResultsAnalyzer(tk.Tk):
         self.main_frame.pack(side=tk.LEFT, padx=20, pady=20)
         self.main_frame.columnconfigure(0, weight=1)
 
-        self.load_button = ttk.Button(self.main_frame, text="Загрузить файл с результатами",
-                                      command=self.load_results_file)
+        self.load_button = ttk.Button(self.main_frame, text="Загрузить файл с результатами", command=self.load_results_file)
         self.load_button.grid(row=0, column=0, padx=5, pady=5)
 
         self.results_label = ttk.Label(self.main_frame, text="Загруженные файлы:")
@@ -76,6 +88,9 @@ class TestResultsAnalyzer(tk.Tk):
 
         self.full_info_text = tk.Text(self.info_frame, wrap=tk.WORD)
         self.full_info_text.pack(fill=tk.BOTH, expand=True)
+
+        self.open_python_button = ttk.Button(self.main_frame, text="Открыть файл Python", command=self.open_python_file)
+        self.open_python_button.grid(row=3, column=0, padx=5, pady=5)
 
 
 if __name__ == "__main__":

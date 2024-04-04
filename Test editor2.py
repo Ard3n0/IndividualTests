@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from ttkthemes import ThemedStyle
+import subprocess
 
 def open_file():
     filepath = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
@@ -9,6 +10,10 @@ def open_file():
             text = file.read()
             text_area.delete(1.0, tk.END)
             text_area.insert(1.0, text)
+
+def back():
+    root.destroy()
+    subprocess.Popen(["python", "Test.py"])
 
 def save_file():
     filepath = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
@@ -29,7 +34,7 @@ open_button.pack(side=tk.LEFT, padx=5, pady=5)
 save_button = tk.Button(root, text="Сохранить", command=save_file)
 save_button.pack(side=tk.LEFT, padx=5, pady=5)
 
-exit_button = tk.Button(root, text="Выйти", command=root.destroy)
+exit_button = tk.Button(root, text="Вернуться", command=back)
 exit_button.pack(side=tk.LEFT, padx=5, pady=5)
 
 style = ThemedStyle(root)

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from ttkthemes import ThemedStyle
+import subprocess
 
 def create_question_file():
     questions = []
@@ -53,6 +54,10 @@ def create_question_file():
                     file.write("###\n")
                     file.write(str(correct_option) + "\n")
             info_label.config(text=f"Файл '{file_path}' успешно создан.")
+
+    def back():
+        root.destroy()
+        subprocess.Popen(["python", "Test.py"])
 
     def add_option_entry():
         if len(option_entries) < 10:
@@ -128,6 +133,9 @@ def create_question_file():
 
     save_button = ttk.Button(root, text="Сохранить файл", command=save_file)
     save_button.grid(row=5, column=3, padx=5, pady=5)
+
+    save_button = ttk.Button(root, text="Вернуться", command=back)
+    save_button.grid(row=8, column=3, padx=5, pady=5)
 
     info_label = ttk.Label(root, text="")
     info_label.grid(row=6, column=3, padx=5, pady=5)
