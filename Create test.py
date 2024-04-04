@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+from ttkthemes import ThemedStyle
 
 def create_question_file():
     questions = []
@@ -88,6 +89,7 @@ def create_question_file():
 
     root = tk.Tk()
     root.title("Создание файла с вопросами")
+    root.geometry("1000x425")
 
     time_label = ttk.Label(root, text="Длительность теста (в минутах):")
     time_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
@@ -141,6 +143,9 @@ def create_question_file():
     scrollbar = ttk.Scrollbar(root, orient="vertical", command=question_list.yview)
     scrollbar.grid(row=1, column=5, rowspan=7, padx=(0, 5), pady=5, sticky="ns")
     question_list.config(yscrollcommand=scrollbar.set)
+
+    style = ThemedStyle(root)
+    style.set_theme("plastik")
 
     root.mainloop()
 

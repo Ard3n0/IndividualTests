@@ -54,6 +54,9 @@ def create_main_window():
     def test_editor():
         subprocess.Popen(["python", "Test editor2.py"])
 
+    def analyze_test():
+        subprocess.Popen(["python", "Tests_analyze.py"])
+
     def select_file(root):
         file_path = filedialog.askopenfilename(
             title="Выберите файл с вопросами",
@@ -202,8 +205,10 @@ def create_main_window():
     root = tk.Tk()
     root.title("OffTes")
 
+    root.geometry("500x400")
+
     style = ThemedStyle(root)
-    style.set_theme("arc")
+    style.set_theme("ubuntu")
 
     select_file_button = ttk.Button(root, text="Выбрать файл", command=lambda: select_file(root))
     select_file_button.pack()
@@ -212,6 +217,9 @@ def create_main_window():
     create_test_button.pack()
 
     test_editor_button = ttk.Button(root, text="Отредактировать тест", command=test_editor)
+    test_editor_button.pack()
+
+    test_editor_button = ttk.Button(root, text="Просмотреть результаты", command=analyze_test)
     test_editor_button.pack()
 
     root.mainloop()
