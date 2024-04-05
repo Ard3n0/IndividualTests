@@ -2,21 +2,10 @@ import os
 import tkinter as tk
 from tkinter import ttk, filedialog
 from ttkthemes import ThemedStyle
+import sys
 
 
 class TestResultsAnalyzer(tk.Tk):
-    def open_python_file(self):
-        file_path = filedialog.askopenfilename(
-            title="Выберите файл Python",
-            filetypes=[("Python Files", "*.py")]
-        )
-        if file_path:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    content = file.read()
-                    self.show_python_file_content(content)
-            except Exception as e:
-                print("Error opening Python file:", e)
 
     def __init__(self):
         super().__init__()
@@ -63,6 +52,10 @@ class TestResultsAnalyzer(tk.Tk):
             self.full_info_text.insert(tk.END, line)
         self.full_info_text.config(state=tk.DISABLED)
 
+    def open_file(self):
+        other_file = "Test.py"
+        os.execl(sys.executable, sys.executable, other_file)
+
     def create_widgets(self):
         self.main_frame = ttk.Frame(self)
         self.main_frame.pack(side=tk.LEFT, padx=20, pady=20)
@@ -89,8 +82,10 @@ class TestResultsAnalyzer(tk.Tk):
         self.full_info_text = tk.Text(self.info_frame, wrap=tk.WORD)
         self.full_info_text.pack(fill=tk.BOTH, expand=True)
 
-        self.open_python_button = ttk.Button(self.main_frame, text="Открыть файл Python", command=self.open_python_file)
-        self.open_python_button.grid(row=3, column=0, padx=5, pady=5)
+        self.open_file_button = ttk.Button(self.main_frame, text="Вернуться", command=self.open_file)
+        self.open_file_button.grid(row=3, column=0, padx=5, pady=5)
+
+
 
 
 if __name__ == "__main__":
